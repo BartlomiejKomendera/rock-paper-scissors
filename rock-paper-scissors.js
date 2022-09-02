@@ -12,61 +12,80 @@ function getComputerChoice() {
             computerChoice = "Scissors";
             break;
     }
-    console.log(computerChoice);
+    //console.log(computerChoice);
 
     return computerChoice;
-}
-
-function getPlayerChoice() {
-    var playerChoice = window.prompt("Rock, Paper or Scissors?");
-    console.log(playerChoice);
-    return playerChoice;
 }
 
 function playRound(computerChoice, playerChoice) {
     var computerChoice = computerChoice.toLowerCase();
     var playerChoice = playerChoice.toLowerCase();
-    var winner;
+    var result;
 
     if (computerChoice == "rock" && playerChoice == "paper") {
-        winner = "You win! Paper beats Rock";
+        result = "You win! Paper beats Rock";
     }
     if (computerChoice == "rock" && playerChoice == "scissors") {
-        winner = "You lose! Scissors beat Rock";
+        result = "You lose! Rock beats Scissors";
     }
     if (computerChoice == "rock" && playerChoice == "rock") {
-        winner = "You draw! Rock doesn't beat Rock";
+        result = "You draw! Rock doesn't beat Rock";
     }
     if (computerChoice == "paper" && playerChoice == "paper") {
-        winner = "You draw! Paper doesn't beat Paper";
+        result = "You draw! Paper doesn't beat Paper";
     }
     if (computerChoice == "paper" && playerChoice == "scissors") {
-        winner = "You win! Scissors beat Paper";
+        result = "You win! Scissors beat Paper";
     }
     if (computerChoice == "paper" && playerChoice == "rock") {
-        winner = "You lose! Paper beats Rock";
+        result = "You lose! Paper beats Rock";
     }
     if (computerChoice == "scissors" && playerChoice == "paper") {
-        winner = "You lose! Scissors beat Paper";
+        result = "You lose! Scissors beat Paper";
     }
     if (computerChoice == "scissors" && playerChoice == "scissors") {
-        winner = "You draw! Scissors doesn't beat Scissors";
+        result = "You draw! Scissors doesn't beat Scissors";
     }
     if (computerChoice == "scissors" && playerChoice == "rock") {
-        winner = "You win! Rock beats Scissors";
+        result = "You win! Rock beats Scissors";
     }
 
-    return winner;
+    return result;
 
 }
 
 function game() {
-    var winner = "";
+    var result = "";
     var playerScore = 0;
     var computerScore = 0;
-    for (let i = 0; i < 5; i++) {
-        console.log("iteration: " + i);
-        var result = playRound(getComputerChoice(), getPlayerChoice());
+    var i = 0;
+
+    function displayResult(result) {
+        const div = document.querySelector(".result");
+        div.textContent = result;
+    }
+
+    const rock = document.querySelector("#rock");
+    rock.addEventListener("click", () => {
+        i++;
+        displayResult(result = playRound(getComputerChoice(), rock.value));
+        increaseScore();
+    })
+
+    const paper = document.querySelector("#paper");
+    paper.addEventListener("click", () => {
+        displayResult(result = playRound(getComputerChoice(), paper.value));
+        increaseScore();
+    })
+
+    const scissors = document.querySelector("#scissors");
+    scissors.addEventListener("click", () => {
+        displayResult(result = playRound(getComputerChoice(), scissors.value));
+        increaseScore();
+    })
+
+    function increaseScore() {
+
         if (result.includes("win")) {
             console.log("Player wins");
             playerScore++;
@@ -81,17 +100,21 @@ function game() {
             i--;
         }
         if (playerScore == 3) {
-            winner = "Player";
-            break;
+            console.log("Player wins the game");
+            displayEndResult("Player wins the game " + playerScore + "-" + computerScore);
         }
         if (computerScore == 3) {
-            winner = "Computer";
-            break;
+            console.log("Computer wins the game");
+            displayEndResult("Computer wins the game " + computerScore + "-" + playerScore);
+
         }
     }
 
-    return winner;
-
+    function displayEndResult(endResult) {
+        const div = document.querySelector(".result");
+        div.textContent = endResult;
+        div.setAttribute("style", "color: blue");
+    }
 }
 
 console.log(game());
